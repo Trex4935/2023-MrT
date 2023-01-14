@@ -16,4 +16,35 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+    public static class JoystickPortIDs {
+    public static final int leftJoystickPortID = 0;
+    public static final int rightJoystickPortID = 1;
+    }
+
+    public static class DrivetrainConstants {
+    public static final int leftTopCanID = 1;
+    public static final int leftBottomCanID = 2;
+    public static final int rightTopCanID = 5;
+    public static final int rightBottomCanID = 6;
+    }
+
+   /**The drive axis of the joysticks*/
+    public static final int JoystickAxis = 1;
+
+    public static class InvertDrivetrain {
+    public static final int leftInvert = -1;
+    public static final int rightInvert = -1;
+    }
+
+    public static class MotorSpeedMultipliers {
+    public static final double motorSpeedMultiplier = 0.6;
+    public static final double motorSpeedMultiplierLeft = 0.98;
+    public static final double motorSpeedMultiplierRight = 1;
+    }
+    
+    public static final double highGear = 0.9;
+    public static final double lowGear = 0.5;
+
+
 }
