@@ -9,6 +9,7 @@ import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -39,9 +40,9 @@ public class RobotContainer {
 
     // commands
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, leftJoystick, rightJoystick);
-    
-
     drivetrain.setDefaultCommand(driveWithJoysticks);
+
+    SmartDashboard.putData(drivetrain);
 
     // Configure the button bindings
     configureButtonBindings();

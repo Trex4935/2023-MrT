@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -25,6 +26,7 @@ public class Drivetrain extends SubsystemBase {
   int rightInvert;
 
   double motorSpeedMultiplier;
+  double m_MaxSpeed;
 
   DifferentialDrive drive;
 
@@ -53,7 +55,7 @@ public class Drivetrain extends SubsystemBase {
     rightMotorGroup.setInverted(true);
 
     // motor speed multiplier
-    motorSpeedMultiplier = MotorSpeedMultipliers.motorSpeedMultiplier;
+    // motorSpeedMultiplier = MotorSpeedMultipliers.motorSpeedMultiplier;
 
 
 
@@ -66,10 +68,8 @@ public class Drivetrain extends SubsystemBase {
 
   public void driveWithJoysticks(Joystick joystick1, Joystick joystick2) {
     drive.tankDrive(
-        (((joystick1.getRawAxis(Constants.JoystickAxis)) * leftInvert)
-            * MotorSpeedMultipliers.motorSpeedMultiplierLeft),
-        (((joystick2.getRawAxis(Constants.JoystickAxis)) * rightInvert)
-            * MotorSpeedMultipliers.motorSpeedMultiplierRight));
+        (((joystick1.getRawAxis(Constants.JoystickAxis)) * leftInvert)),
+        (((joystick2.getRawAxis(Constants.JoystickAxis)) * rightInvert)));
   }
 
   public void driveStraight(Double speed) {
@@ -82,6 +82,19 @@ public class Drivetrain extends SubsystemBase {
     leftBottom.stopMotor();
     rightTop.stopMotor();
     rightBottom.stopMotor();
+  }
+
+  private double getMaxSpeed(){
+    return m_MaxSpeed;
+  }
+
+  private void setMaxSpeed(double MaxSpeed){
+    drive.setMaxOutput(MaxSpeed);
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder){
+    builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
   }
 
   @Override
