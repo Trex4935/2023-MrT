@@ -20,7 +20,7 @@ public final class Constants {
     /** Class for the speed and acceleration limits of the robot. */
     public static class MovementConstraints {
       public static final double dtmaxaccel = 1;
-      public static final double dtmaxspeed = 1.0;
+      public static final double dtmaxspeed = 0.6;
       public static final double dtmaxomega = 2.0;
   
       
@@ -54,7 +54,7 @@ public final class Constants {
     public static final double motorSpeedMultiplierRight = 1;
     }
     
-    public static final double highGear = 0.9;
+    public static final double highGear = 0.7;
     public static final double lowGear = 0.5;
 
 
