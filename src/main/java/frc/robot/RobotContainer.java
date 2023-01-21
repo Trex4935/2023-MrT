@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.JoystickPortIDs;
 import frc.robot.commands.ca_autoTrajectory;
+import frc.robot.commands.ca_autoTurnKinematic;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.subsystems.Drivetrain;
 
@@ -35,6 +36,7 @@ public class RobotContainer {
   private final Drivetrain drivetrain;
   private final cm_driveWithJoysticks driveWithJoysticks;
   private final ca_autoTrajectory autoTrajectory;
+  private final ca_autoTurnKinematic autoTurnTrajectory;
 
   // triggers and buttons
 
@@ -68,6 +70,7 @@ public class RobotContainer {
       trajectoryConfig);
 
       autoTrajectory = new ca_autoTrajectory(drivetrain, trajectory);
+      autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, - 720.0); // testing 90 degree Turn;
 
     SmartDashboard.putData(drivetrain);
 
@@ -94,6 +97,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return autoTrajectory;
+    return autoTurnTrajectory;
   }
 }
