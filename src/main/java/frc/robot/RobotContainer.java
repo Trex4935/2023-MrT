@@ -5,8 +5,18 @@
 package frc.robot;
 
 import frc.robot.Constants.JoystickPortIDs;
+import frc.robot.commands.ca_autoTrajectory;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.subsystems.Drivetrain;
+
+import java.util.List;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +34,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain drivetrain;
   private final cm_driveWithJoysticks driveWithJoysticks;
+  private final ca_autoTrajectory autoTrajectory;
 
   // triggers and buttons
 
@@ -41,6 +52,22 @@ public class RobotContainer {
     // commands
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, leftJoystick, rightJoystick);
     drivetrain.setDefaultCommand(driveWithJoysticks);
+
+
+    //Trajectory for autonomous
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+      0.5, 1);
+
+      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of(
+        new Translation2d(0, 1),
+        new Translation2d(0, 2)),
+        //new Translation2d(xn, yn),
+      new Pose2d(0, 4, Rotation2d.fromDegrees(0)),
+      trajectoryConfig);
+
+      autoTrajectory = new ca_autoTrajectory(drivetrain, trajectory);
 
     SmartDashboard.putData(drivetrain);
 
@@ -67,6 +94,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return autoTrajectory;
   }
 }
