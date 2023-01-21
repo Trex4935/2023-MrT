@@ -137,6 +137,10 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void initSendable(SendableBuilder builder){
     builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
+    builder.addDoubleProperty("LeftTop", ()->leftTop.getMotorOutputVoltage(), null);
+    builder.addDoubleProperty("leftBottom", ()->leftBottom.getMotorOutputVoltage(), null);
+    builder.addDoubleProperty("rightTop", ()->rightTop.getMotorOutputVoltage(), null);
+    builder.addDoubleProperty("rightBottom", ()->rightBottom.getMotorOutputVoltage(), null);
   }
 
   @Override
