@@ -93,7 +93,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   private void setMaxSpeed(double MaxSpeed){
-    drive.setMaxOutput(MaxSpeed);
+    m_MaxSpeed = MaxSpeed;
+    drive.setMaxOutput(m_MaxSpeed);
   }
 
   @Override
