@@ -17,6 +17,15 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+    /** Class for the speed and acceleration limits of the robot. */
+    public static class MovementConstraints {
+      public static final double dtmaxaccel = 1;
+      public static final double dtmaxspeed = 0.6;
+      public static final double dtmaxomega = 2.0;
+  
+      
+    }
+
     public static class JoystickPortIDs {
     public static final int leftJoystickPortID = 0;
     public static final int rightJoystickPortID = 1;
@@ -27,6 +36,8 @@ public final class Constants {
     public static final int leftBottomCanID = 2;
     public static final int rightTopCanID = 5;
     public static final int rightBottomCanID = 6;
+    public final static double trackWidth = .641 ; // Meters
+
     }
 
    /**The drive axis of the joysticks*/
@@ -43,7 +54,7 @@ public final class Constants {
     public static final double motorSpeedMultiplierRight = 1;
     }
     
-    public static final double highGear = 0.9;
+    public static final double highGear = 0.7;
     public static final double lowGear = 0.5;
 
 

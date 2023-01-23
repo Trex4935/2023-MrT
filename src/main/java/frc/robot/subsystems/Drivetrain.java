@@ -2,8 +2,12 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,6 +31,13 @@ public class Drivetrain extends SubsystemBase {
 
   double motorSpeedMultiplier;
   double m_MaxSpeed;
+
+  //Kinemtatics
+  DifferentialDriveKinematics kin;
+
+  //Simulate
+  public double zSimAngle;
+
 
   DifferentialDrive drive;
 
@@ -63,6 +74,13 @@ public class Drivetrain extends SubsystemBase {
     drive = new DifferentialDrive(leftMotorGroup, rightMotorGroup);
     drive.setMaxOutput(Constants.highGear);
 
+    
+        // Distance between 2 wheel godzilla 641 mm, to do find or measure same for mrT
+        kin = new DifferentialDriveKinematics(DrivetrainConstants.trackWidth);
+
+    // initiate simulate gyro Position
+    zSimAngle = 0;
+
   }
 
 
@@ -97,9 +115,33 @@ public class Drivetrain extends SubsystemBase {
     drive.setMaxOutput(m_MaxSpeed);
   }
 
+  // takes in chasis speed and chasis angular rate or rotation and return the left speed of the wheel;
+  public double getLeftSpeedKin( double chassisSpeedx, double chassisAngularRate){
+      double chassisSpeedy = 0;
+      DifferentialDriveWheelSpeeds wheelSpeed = kin.toWheelSpeeds(new ChassisSpeeds(chassisSpeedx,chassisSpeedy, chassisAngularRate));
+      return wheelSpeed.leftMetersPerSecond;
+  }
+
+  // takes in chasis speed and chasis angular rate or rotation and return the right speed of the wheel;
+  public double getRightpeedKin(double chassisSpeedx, double chassisAngularRate){
+      double chassisSpeedy = 0;
+      DifferentialDriveWheelSpeeds wheelSpeed = kin.toWheelSpeeds(new ChassisSpeeds(chassisSpeedx,chassisSpeedy, chassisAngularRate));;
+      return wheelSpeed.rightMetersPerSecond;
+  }
+
+  public void simulateGyro(double leftSpeed, double rightSpeed, Timer timer){
+
+      ChassisSpeeds chassisSpeed = kin.toChassisSpeeds(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
+      zSimAngle = chassisSpeed.omegaRadiansPerSecond * 0.02 + zSimAngle;
+  }
+
   @Override
   public void initSendable(SendableBuilder builder){
     builder.addDoubleProperty("MaxSpeed", this::getMaxSpeed, this::setMaxSpeed);
+    builder.addDoubleProperty("LeftTop", ()->leftTop.getMotorOutputVoltage(), null);
+    builder.addDoubleProperty("leftBottom", ()->leftBottom.getMotorOutputVoltage(), null);
+    builder.addDoubleProperty("rightTop", ()->rightTop.getMotorOutputVoltage(), null);
+    builder.addDoubleProperty("rightBottom", ()->rightBottom.getMotorOutputVoltage(), null);
   }
 
   @Override
