@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -15,6 +16,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.InvertDrivetrain;
 import frc.robot.Constants.MotorSpeedMultipliers;
+import edu.wpi.first.wpilibj.SPI;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -37,6 +39,9 @@ public class Drivetrain extends SubsystemBase {
 
   //Simulate
   public double zSimAngle;
+
+  //Gyro
+  public static AHRS ahrs;
 
 
   DifferentialDrive drive;
@@ -80,6 +85,10 @@ public class Drivetrain extends SubsystemBase {
 
     // initiate simulate gyro Position
     zSimAngle = 0;
+
+    
+        // Creating gyro object
+        ahrs = new AHRS(SPI.Port.kMXP);
 
   }
 
@@ -134,6 +143,28 @@ public class Drivetrain extends SubsystemBase {
       ChassisSpeeds chassisSpeed = kin.toChassisSpeeds(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
       zSimAngle = chassisSpeed.omegaRadiansPerSecond * 0.02 + zSimAngle;
   }
+
+
+    /** Resets the gyro */
+    public void resetGyro() {
+      ahrs.reset();
+  }
+
+  /** Gets Roll(X) angle from Gyro */
+  public Float getXAngle() {
+      return ahrs.getRoll();
+  }
+
+  /**  Gets Pitch(Y) angle from Gyro */
+  public Float getYAngle() {
+      return ahrs.getPitch();
+  }
+
+  /** Gets Yaw(Z) angle from Gyro */
+  public Float getZAngle() {
+      return ahrs.getYaw();
+  }
+
 
   @Override
   public void initSendable(SendableBuilder builder){

@@ -33,7 +33,7 @@ public class ca_autoTurnKinematic extends CommandBase {
     timer.start();
     
     System.out.println("Time: "+ timer.get() + " Velocity: " + 0 + " Omega: " + 0 +
-    " Angle: " +  Math.toDegrees(dt.zSimAngle) + " AngleTarget: " +  eAngle + " LeftSpeed: " + 0 + " RightSpeed: " + 0);
+    " Angle: " +  dt.getZAngle() + " AngleTarget: " +  eAngle + " LeftSpeed: " + 0 + " RightSpeed: " + 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,7 +42,7 @@ public class ca_autoTurnKinematic extends CommandBase {
     Double chassisSpeed = 0.0;
     Double comega = 0.0;
     // if Start > End  ,  go left, w +
-    if ( Math.toDegrees(dt.zSimAngle) > eAngle) {
+    if ( dt.getZAngle() > eAngle) {
       comega = - MovementConstraints.dtmaxomega ;
     } else { // if Start < End, go right, w -
       comega = MovementConstraints.dtmaxomega;
@@ -53,9 +53,9 @@ public class ca_autoTurnKinematic extends CommandBase {
 
     dt.driveTank(leftSpeed, rightSpeed);
     dt.simulateGyro(leftSpeed, rightSpeed, timer);
-    Double error = eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) ;
+    Double error = eAngle.doubleValue() - dt.getZAngle() ;
     System.out.println("Time: "+ timer.get() + " Velocity: " + chassisSpeed + " Omega: " + comega +
-    " Angle: " +  Math.toDegrees(dt.zSimAngle) + " AngleTarget: " +  eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: " + rightSpeed + " Error: " + error );
+    " Angle: " +  dt.getZAngle() + " AngleTarget: " +  eAngle + " LeftSpeed: " + leftSpeed + " RightSpeed: " + rightSpeed + " Error: " + error );
   }
 
   // Called once the command ends or is interrupted.
@@ -67,6 +67,6 @@ public class ca_autoTurnKinematic extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return  eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) <= 2.0 && eAngle.doubleValue() - Math.toDegrees(dt.zSimAngle) >= - 2.0  ||  timer.get() > 15; 
+    return  eAngle.doubleValue() - dt.getZAngle() <= 2.0 && eAngle.doubleValue() - dt.getZAngle() >= - 2.0  ||  timer.get() > 10; 
   }
 }
