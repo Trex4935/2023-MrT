@@ -165,6 +165,61 @@ public class Drivetrain extends SubsystemBase {
       return ahrs.getYaw();
   }
 
+  // Takes in angle in Degree
+  public Float to360(Float angle) {
+    if (angle >= 0) {
+
+    } else {
+      angle = angle + 360;
+    }
+
+    return angle;
+  }
+
+  // Takes in angle in Degree
+  public Float to180(Float angle) {
+    if (angle < 180) {
+
+    } else {
+      angle = angle - 360;
+    }
+
+    return angle;
+
+  }
+
+  public void turnDirection(Float sAngle, Float eAngle) {
+
+    // at 20 degree to 120
+    /// 120 -20 = 100; 120 -20 = 100; turn left
+    /// 20 - 120 = -100; 20 - 100 = -100 ; turn right
+    /// -90 -15 = -115; 270 - 15 = 255; turn right, because negative is smaller
+    /// 15 - -90 = 115; 15 - 270; -255; turn left, because pausitive and small
+    // number
+
+    // at - 20 degree to -120
+    /// -120 - - 20 = - 100; 240 - 340 = 120 ; turn right, because negative and
+    // number smaller
+    /// -20 - - 120 = 100; 340 - 240 = 120 ; turn left, because positive and number
+    // smaller
+    /// 90 - - 20 = 110; 90 - 340 = -250; turn left, because positive is smaller
+    /// -20 - 90 = -110 ; 340 - 90; 250; turn right, because negative and small
+    // number
+
+    float dir180 = to180(eAngle) - to180(sAngle);
+    System.out.println(dir180);
+    float dir360 = to360(eAngle) - to360(sAngle);
+    System.out.println(dir360);
+
+    if (Math.abs(dir180) <= Math.abs(dir360)) {
+      if (dir180 > 0) {
+        System.out.println("turn Left");
+      } else {
+        System.out.println("turn Right");
+      }
+    }
+
+      }
 
   @Override
   public void initSendable(SendableBuilder builder){
