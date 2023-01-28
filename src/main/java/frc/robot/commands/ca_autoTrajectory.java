@@ -56,7 +56,7 @@ public class ca_autoTrajectory extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ( currState.poseMeters.getY() > 0.999 && currState.velocityMetersPerSecond < 0.005);
+    return ( currState.poseMeters.getY() > 0.4999 && currState.velocityMetersPerSecond < 0.005);
   }
   
 }

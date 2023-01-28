@@ -38,7 +38,7 @@ public class Drivetrain extends SubsystemBase {
   DifferentialDriveKinematics kin;
 
   //Simulate
-  public double zSimAngle;
+  public Double zSimAngle;
 
   //Gyro
   public static AHRS ahrs;
@@ -84,12 +84,18 @@ public class Drivetrain extends SubsystemBase {
         kin = new DifferentialDriveKinematics(DrivetrainConstants.trackWidth);
 
     // initiate simulate gyro Position
-    zSimAngle = 0;
+    zSimAngle = 0.0;
 
     
         // Creating gyro object
         ahrs = new AHRS(SPI.Port.kMXP);
+        ahrs.calibrate();
+        //ahrs.reset();
 
+  }
+
+  public void calibGyro(){
+    ahrs.calibrate();
   }
 
 
@@ -162,7 +168,11 @@ public class Drivetrain extends SubsystemBase {
 
   /** Gets Yaw(Z) angle from Gyro */
   public Float getZAngle() {
-      return ahrs.getYaw();
+      return -ahrs.getYaw();
+  }
+
+  public Double getZAngDouble(){
+    return getZAngle().doubleValue();
   }
 
   // Takes in angle in Degree
@@ -178,7 +188,7 @@ public class Drivetrain extends SubsystemBase {
 
   // Takes in angle in Degree
   public Float to180(Float angle) {
-    if (angle < 180) {
+    if (angle <= 180) {
 
     } else {
       angle = angle - 360;
@@ -188,7 +198,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public void turnDirection(Float sAngle, Float eAngle) {
+  public boolean turnDirection(Float sAngle, Float eAngle) {
 
     // at 20 degree to 120
     /// 120 -20 = 100; 120 -20 = 100; turn left
@@ -211,13 +221,18 @@ public class Drivetrain extends SubsystemBase {
     float dir360 = to360(eAngle) - to360(sAngle);
     System.out.println(dir360);
 
-    if (Math.abs(dir180) <= Math.abs(dir360)) {
+    //left = true, right = false
+    // if (Math.abs(dir180) <= Math.abs(dir360)) {
       if (dir180 > 0) {
-        System.out.println("turn Left");
+        System.out.println("Left");
+        return true;
       } else {
-        System.out.println("turn Right");
+        System.out.println("Right");
+        return false;
       }
-    }
+    // } else {
+    //   return true;
+    // }
 
       }
 
@@ -228,10 +243,18 @@ public class Drivetrain extends SubsystemBase {
     builder.addDoubleProperty("leftBottom", ()->leftBottom.getMotorOutputVoltage(), null);
     builder.addDoubleProperty("rightTop", ()->rightTop.getMotorOutputVoltage(), null);
     builder.addDoubleProperty("rightBottom", ()->rightBottom.getMotorOutputVoltage(), null);
+    builder.addDoubleProperty("angle", ()->getZAngDouble(), null);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+      //System.out.println("Gyro:"+ getZAngle());//Simulate Gyro to see if we get angle clockwise or counterclock wise.
+      // turnDirection(0f,-50f);
+      
+      // turnDirection(-50f,0f);
+      // turnDirection(-150f,0f);
+      
+      // turnDirection(0f,0-150f);
   }
 }

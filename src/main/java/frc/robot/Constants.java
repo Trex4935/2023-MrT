@@ -21,7 +21,7 @@ public final class Constants {
     public static class MovementConstraints {
       public static final double dtmaxaccel = 1;
       public static final double dtmaxspeed = 0.6;
-      public static final double dtmaxomega = 2.0;
+      public static final double dtmaxomega = 1.5;
   
       
     }
