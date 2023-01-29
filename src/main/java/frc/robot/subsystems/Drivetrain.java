@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -44,6 +45,12 @@ public class Drivetrain extends SubsystemBase {
     leftBottom.configFactoryDefault();
     rightBottom.configFactoryDefault();
     rightTop.configFactoryDefault();
+
+    //Sets neutral mode to brake
+    leftTop.setNeutralMode(NeutralMode.Brake);
+    leftBottom.setNeutralMode(NeutralMode.Brake);
+    rightTop.setNeutralMode(NeutralMode.Brake);
+    rightBottom.setNeutralMode(NeutralMode.Brake);
 
     // invert
     leftInvert = InvertDrivetrain.leftInvert;
