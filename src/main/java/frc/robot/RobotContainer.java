@@ -5,8 +5,20 @@
 package frc.robot;
 
 import frc.robot.Constants.JoystickPortIDs;
+import frc.robot.commands.ca_autoTrajectory;
+import frc.robot.commands.ca_autoTurnKinematic;
+import frc.robot.commands.ca_driveAutoSquare;
 import frc.robot.commands.cm_driveWithJoysticks;
 import frc.robot.subsystems.Drivetrain;
+
+import java.util.List;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,8 +34,11 @@ public class RobotContainer {
   public static Joystick leftJoystick;
   public static Joystick rightJoystick;
   // The robot's subsystems and commands are defined here...
-  private final Drivetrain drivetrain;
+  public final Drivetrain drivetrain;
   private final cm_driveWithJoysticks driveWithJoysticks;
+  private final ca_autoTrajectory autoTrajectory;
+  private final ca_autoTurnKinematic autoTurnTrajectory;
+  private final ca_driveAutoSquare autoSquare;
 
   // triggers and buttons
 
@@ -42,10 +57,30 @@ public class RobotContainer {
     driveWithJoysticks = new cm_driveWithJoysticks(drivetrain, leftJoystick, rightJoystick);
     drivetrain.setDefaultCommand(driveWithJoysticks);
 
+
+    //Trajectory for autonomous
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+      0.5, 1);
+
+      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of(
+        new Translation2d(0, 0.125),
+        new Translation2d(0, 0.25)),
+        //new Translation2d(xn, yn),
+      new Pose2d(0, 0.5, Rotation2d.fromDegrees(0)),
+      trajectoryConfig);
+
+      autoTrajectory = new ca_autoTrajectory(drivetrain, trajectory);
+      autoTurnTrajectory = new ca_autoTurnKinematic(drivetrain, 0.0, 90.0); // testing 90 degree Turn;
+      autoSquare = new ca_driveAutoSquare(drivetrain,trajectory);
+
     SmartDashboard.putData(drivetrain);
 
     // Configure the button bindings
     configureButtonBindings();
+    
+    drivetrain.resetGyro();
   }
 
   /**
@@ -67,6 +102,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return autoSquare;
   }
 }
